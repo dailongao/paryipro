@@ -9,16 +9,13 @@ paryipro = \
         "UCL9dLCVvHyMiqjp2RDgowqQ", #Ritsu
         "UCIaC5td9nGG6JeKllWLwFLA", #Mana
         "UCRXBTd80F5IIWWY4HatJ5Ug", #Serena
-        "UCMzxQ58QL4NNbWghGymtHvw", #Test
-        "UCMzxQ58QL4NNbWghGymtHvw", #Test
-        "UCMzxQ58QL4NNbWghGymtHvw", #Test
-        "UCMzxQ58QL4NNbWghGymtHvw", #Test
 ]
 
 ret = []
 
 for channel in paryipro:
     url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=" + channel + "&eventType=live&type=video&key=" + apikey.getkey()
+    print(url)
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     if len(data["items"]) > 0:
