@@ -1,7 +1,10 @@
+var oldChannels = []
+var newChannels = []
+
 scalePlayers = function() {
 	var width = $(window).width();
 	var height = $(window).height();
-	var blocks = liveChannels.length();
+	var blocks = newChannels.length;
 
 	var config = {
 		blocksPerRow: 1,
@@ -53,16 +56,31 @@ scalePlayers = function() {
 }
 
 updateLiveChannelsData = function() {
-	$.getJSON("paryi.pro", function(data) {
-		return data;
+	return $.parseJSON($.ajax({ 
+		url: 'paryi.pro', 
+		async: false
+	}).responseText);
+}
+
+addBlock = function(videoId) {
+	$("#player-container").append("<div class='player' id='player-" + videoId + "'></div>")
+	$("#player-" + videoId).append("<iframe id='ytplayer-" + videoId + "' type='text/html' src='http://www.youtube.com/embed/" + videoId + "' frameborder='0'/>")
+}
+
+removeBlock = function(videoId) {
+	$("#player-" + videoId).remove()
+}
+
+addLivingChannels = function(channels) {
+	$.each(channels, function(index, value) {
+		addBlock(value)
 	})
 }
 
-oldChannels = []
-newChannels = []
-
-addLivingChannels = function(channels) {
-	
+removeNotLivingChannels = function(channels) {
+	$.each(channels, function(index, value) {
+		removeBlock(value)
+	})
 }
 
 updatePage = function() {
@@ -71,8 +89,19 @@ updatePage = function() {
 	notLivingChannels = $(oldChannels).not(newChannels).get()
 	removeNotLivingChannels(notLivingChannels)
 	addLivingChannels(newLivingChannels)
+	scalePlayers();
+	oldChannels = newChannels
 }
 
 $(document).ready(function() {
   $.ajaxSetup({ cache: false });
+  $(window).resize(function() {
+	scalePlayers();  
+  })
+  // UpdatePage
+  updatePage();
+  // Update Timer
+  setInterval(function() {
+	  updatePage();
+  }, 60000);
 });
