@@ -1,4 +1,5 @@
 import urllib, json
+import apikey
 paryipro = \
 [ \
         "UCH0ObmokE-zUOeihkKwWySA", #Shiori
@@ -17,7 +18,7 @@ paryipro = \
 ret = []
 
 for channel in paryipro:
-    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=" + channel + "&eventType=live&type=video&key=AIzaSyDnV6t8BySCelYX9zon1n8c2EtPYw-E8vU"
+    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=" + channel + "&eventType=live&type=video&key=" + apikey.getkey()
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     if len(data["items"]) > 0:
