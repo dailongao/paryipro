@@ -1,5 +1,7 @@
 import urllib, json
 import apikey
+import time
+import datetime
 paryipro = \
 [ \
         "UCH0ObmokE-zUOeihkKwWySA", #Shiori
@@ -11,15 +13,21 @@ paryipro = \
         "UCRXBTd80F5IIWWY4HatJ5Ug", #Serena
 ]
 
-ret = []
+while True:
 
-for channel in paryipro:
-    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=" + channel + "&eventType=live&type=video&key=" + apikey.getkey()
-    print(url)
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
-    if len(data["items"]) > 0:
-        ret.append(data["items"][0]["id"]["videoId"])
+    print("Updating..." + str(datetime.datetime.now()))
 
-f = open("paryi.pro", "w")
-f.write(json.dumps(ret))
+    ret = []
+
+    for channel in paryipro:
+        url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=" + channel + "&eventType=live&type=video&key=" + apikey.getkey()
+        response = urllib.urlopen(url)
+        data = json.loads(response.read())
+        if len(data["items"]) > 0:
+            ret.append(data["items"][0]["id"]["videoId"])
+
+    f = open("paryi.pro", "w")
+    f.write(json.dumps(ret))
+    f.close()
+
+    time.sleep(30)
